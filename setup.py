@@ -19,7 +19,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='hedgehog-protocol-spec',
-    version='0.7.0',
+    version='0.7.1',
     description='Protocol definitions for Hedgehog',
     long_description=long_description,
     url="https://github.com/PRIArobotics/HedgehogProtocolSpec",
@@ -55,6 +55,12 @@ setup(
     },
 
     package_data={
+        'gsl_protocol': [
+            'hedgehog_protocol',
+            'grammar/*.g4',
+            'grammar/*.g4v',
+            'grammar/*.tokens',
+        ],
     },
 
     entry_points={
