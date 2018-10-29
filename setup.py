@@ -55,6 +55,12 @@ setup(
     },
 
     package_data={
+        'gsl_protocol': [
+            'hedgehog_protocol',
+            'grammar/*.g4',
+            'grammar/*.g4v',
+            'grammar/*.tokens',
+        ],
     },
 
     entry_points={
