@@ -89,9 +89,12 @@ def augment_model(model):
 
             for param in messageClass.params:
                 if isinstance(param, (MandatoryParam, RepeatedParam)):
-                    param.field = fields[param.name]
+                    if param.name in fields:
+                        param.field = fields[param.name]
                 elif isinstance(param, OptionalParam):
-                    param.fields = [fields[option] for option in param.options]
+                    _fields = [fields[option] for option in param.options if option in fields]
+                    if _fields:
+                        param.fields = _fields
                 else:
                     assert False
 
