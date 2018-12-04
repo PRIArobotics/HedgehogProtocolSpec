@@ -71,6 +71,41 @@ io.DigitalMessage digital_message = 4 {
     """digital update""";
 }
 
+imu.ImuMessage imu_message = 9 {
+  ImuKind kind = 1;
+  sint32 x = 2;
+  sint32 y = 3;
+  sint32 z = 4;
+  nested Subscription subscription = 5;
+
+  => imu.RateRequest()
+    """IMU rate request => IMU rate reply""";
+  <= imu.RateReply(x, y, z)
+    """IMU rate reply""";
+  => imu.RateSubscribe(subscription)
+    """IMU rate subscribe => ack""";
+  <- imu.RateUpdate(x, y, z, subscription)
+    """IMU rate update""";
+
+  => imu.AccelerationRequest()
+    """IMU acceleration request => IMU acceleration reply""";
+  <= imu.AccelerationReply(x, y, z)
+    """IMU acceleration reply""";
+  => imu.AccelerationSubscribe(subscription)
+    """IMU acceleration subscribe => ack""";
+  <- imu.AccelerationUpdate(x, y, z, subscription)
+    """IMU acceleration update""";
+
+  => imu.PoseRequest()
+    """IMU pose request => IMU pose reply""";
+  <= imu.PoseReply(x, y, z)
+    """IMU pose reply""";
+  => imu.PoseSubscribe(subscription)
+    """IMU pose subscribe => ack""";
+  <- imu.PoseUpdate(x, y, z, subscription)
+    """IMU pose update""";
+}
+
 motor.MotorAction motor_action = 5 {
   """Command for one motor. By setting a relative or absolute goal position,
 the motor will go into `reached_state` upon reaching the position."""
