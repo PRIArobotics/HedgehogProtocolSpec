@@ -267,3 +267,12 @@ process.ProcessExitUpdate process_exit_update = 23 {
   <- process.ExitUpdate(pid, exit_code)
     """process exit update""";
 }
+
+speaker.SpeakerAction speaker_action = 25 {
+  """Set one servo target position"""
+
+  uint32 frequency = 1;
+
+  => speaker.Action(frequency)
+    """servo action => ack""";
+}
