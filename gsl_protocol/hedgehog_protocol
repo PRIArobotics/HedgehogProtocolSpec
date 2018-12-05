@@ -123,6 +123,21 @@ the motor will go into `reached_state` upon reaching the position."""
     """motor action => ack""";
 }
 
+motor.MotorConfigAction motor_config_action = 24 {
+  """Configures one motor of DC, encoder, or stepper operation.
+Stepper configuration requires two motor ports to be combined into one stepper
+motor."""
+
+  uint32 port = 1;
+  oneof config {
+    nested Dummy dc = 2;
+    nested EncoderConfig encoder = 3;
+    nested Dummy stepper = 4;
+  }
+  => motor.ConfigAction(port, config)
+    """motor config action => ack""";
+}
+
 motor.MotorCommandMessage motor_command_message = 17 {
   """Request or reply for one motor's current command.
 The command may change by a motor action, or by reaching the goal position of a terminating motor action."""
