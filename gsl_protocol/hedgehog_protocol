@@ -134,6 +134,7 @@ motor."""
     nested EncoderConfig encoder = 3;
     nested Dummy stepper = 4;
   }
+
   => motor.ConfigAction(port, config)
     """motor config action => ack""";
 }
@@ -143,17 +144,22 @@ motor.MotorCommandMessage motor_command_message = 17 {
 The command may change by a motor action, or by reaching the goal position of a terminating motor action."""
 
   uint32 port = 1;
+  oneof config {
+    nested Dummy dc = 5;
+    nested EncoderConfig encoder = 6;
+    nested Dummy stepper = 7;
+  }
   MotorState state = 2;
   sint32 amount = 3;
   nested Subscription subscription = 4;
 
   => motor.CommandRequest(port)
     """motor command request => motor command reply""";
-  <= motor.CommandReply(port, state, amount)
+  <= motor.CommandReply(port, config, state, amount)
     """motor command reply""";
   => motor.CommandSubscribe(port, subscription)
     """motor command subscribe => ack""";
-  <- motor.CommandUpdate(port, state, amount, subscription)
+  <- motor.CommandUpdate(port, config, state, amount, subscription)
     """motor command update""";
 }
 
