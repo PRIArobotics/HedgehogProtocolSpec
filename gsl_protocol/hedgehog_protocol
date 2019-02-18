@@ -72,6 +72,10 @@ io.DigitalMessage digital_message = 4 {
 }
 
 imu.ImuMessage imu_message = 9 {
+  """Request or reply for Hedgehog's IMU.
+  A request queries either the `RATE``, `ACCELERATION`, or `POSE` of the IMU,
+  and the result contains data for all three axes."""
+
   ImuKind kind = 1;
   sint32 x = 2;
   sint32 y = 3;
@@ -124,9 +128,9 @@ the motor will go into `reached_state` upon reaching the position."""
 }
 
 motor.MotorConfigAction motor_config_action = 24 {
-  """Configures one motor of DC, encoder, or stepper operation.
+  """Configures one motor for DC, encoder, or stepper operation.
 Stepper configuration requires two motor ports to be combined into one stepper
-motor."""
+motor and thus only works for even motor ports (i.e. 0 and 2)."""
 
   uint32 port = 1;
   oneof config {
@@ -242,7 +246,10 @@ process.ProcessExecuteReply process_execute_reply = 21 {
 }
 
 process.ProcessStreamMessage process_stream_message = 8 {
-  """send data to/receive data from a process' file streams"""
+  """Send data to/receive data from a process' file streams.
+The `STDIN` fileno may only be used for sending data to the process,
+the others only for receiving data from the process.
+An empty chunk means `EOF`."""
 
   uint32 pid = 1;
   ProcessFileno fileno = 2;
@@ -265,7 +272,8 @@ process.ProcessSignalAction process_signal_action = 22 {
 }
 
 process.ProcessExitUpdate process_exit_update = 23 {
-  """Signals that the process has exited"""
+  """Signals that the process has exited.
+A negative value `-N` indicates that the child was terminated by signal `N`."""
 
   uint32 pid = 1;
   int32 exit_code = 2;
@@ -275,7 +283,8 @@ process.ProcessExitUpdate process_exit_update = 23 {
 }
 
 speaker.SpeakerAction speaker_action = 25 {
-  """Set one servo target position"""
+  """Sets the speaker frequency in Hertz; a frequency of zero turns the speaker off.
+Only a range of frequencies may be valid depending on the Hardware."""
 
   uint32 frequency = 1;
 
