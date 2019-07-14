@@ -19,7 +19,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='hedgehog-protocol-spec',
-    version='0.8.0rc1',
+    version='0.9.0rc1',
     description='Protocol definitions for Hedgehog',
     long_description=long_description,
     url="https://github.com/PRIArobotics/HedgehogProtocolSpec",
