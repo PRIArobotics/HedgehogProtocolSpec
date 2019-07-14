@@ -10,6 +10,46 @@ is expected. Negative acknowledgements may have a `message` describing the error
     """ack""";
 }
 
+version.VersionMessage version_message = 26 {
+  """Request or reply for version information of the Hedgehog hardware, firmware, and server software."""
+
+  bytes uc_id = 1;
+  string hardware_version = 2;
+  string firmware_version = 3;
+  string server_version = 4;
+
+  => version.Request()
+    """version request => version reply""";
+  <= version.Reply(uc_id, hardware_version, firmware_version, server_version)
+    """version reply""";
+}
+
+emergency.EmergencyAction emergency_action = 27 {
+  """Activates or releases the emergency-stop of the HWC."""
+
+  bool activate = 1;
+
+  => emergency.Action(activate)
+    """emergency action => ack""";
+}
+
+emergency.EmergencyMessage emergency_message = 28 {
+  """Request or reply for the current HWC emergency stop state.
+  The command may change by an emergency action, or by a press of the emergency stop button on the HWC."""
+
+  bool active = 1;
+  nested Subscription subscription = 2;
+
+  => emergency.Request()
+    """emergency request => emergency command reply""";
+  <= emergency.Reply(active)
+    """emergency reply""";
+  => emergency.Subscribe(subscription)
+    """emergency subscribe => ack""";
+  <- emergency.Update(active, subscription)
+    """emergency update""";
+}
+
 io.IOAction io_action = 2 {
   """Changes the configuration of one IO port"""
 
