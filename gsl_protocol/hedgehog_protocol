@@ -363,3 +363,20 @@ This action is therefore a relatively expensive operation."""
   => vision.RetrieveFrameAction()
     """read frame action => ack""";
 }
+
+vision.VisionFrameMessage vision_frame_message = 30 {
+  """Request or reply for the current frame,
+optionally with highlighting for one of the channels added in the image.
+A highlight value of -1 means no highlighting,
+a different value means the index of the channel when opening the camera.
+
+The frame itself is a jpg encoded image."""
+
+  int32 highlight = 1;
+  bytes frame = 2;
+
+  => vision.FrameRequest(highlight)
+    """frame request => frame reply""";
+  <= vision.FrameReply(highlight, frame)
+    """frame reply""";
+}
