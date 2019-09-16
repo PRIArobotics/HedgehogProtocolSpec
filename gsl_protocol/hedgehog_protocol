@@ -339,8 +339,9 @@ Similar to a subscription, the camera must be closed as many times as it was ope
 It will remain open until it is closed the appropriate number of times."""
 
   bool open = 1;
+  repeated Channel channels = 2;
 
-  => vision.CameraAction(open)
+  => vision.CameraAction(open, *channels)
     """camera action => ack""";
 }
 
