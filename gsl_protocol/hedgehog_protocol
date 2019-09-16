@@ -174,9 +174,9 @@ motor and thus only works for even motor ports (i.e. 0 and 2)."""
 
   uint32 port = 1;
   oneof config {
-    nested Dummy dc = 2;
+    nested DcConfig dc = 2;
     nested EncoderConfig encoder = 3;
-    nested Dummy stepper = 4;
+    nested StepperConfig stepper = 4;
   }
 
   => motor.ConfigAction(port, config)
@@ -189,9 +189,9 @@ The command may change by a motor action, or by reaching the goal position of a 
 
   uint32 port = 1;
   oneof config {
-    nested Dummy dc = 5;
+    nested DcConfig dc = 5;
     nested EncoderConfig encoder = 6;
-    nested Dummy stepper = 7;
+    nested StepperConfig stepper = 7;
   }
   MotorState state = 2;
   sint32 amount = 3;
