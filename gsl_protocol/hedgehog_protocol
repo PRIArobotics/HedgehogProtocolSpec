@@ -347,8 +347,10 @@ When closing, channels are ignored and should remain empty.
   bool open = 1;
   repeated Channel channels = 2;
 
-  => vision.CameraAction(open, *channels)
-    """camera action => ack""";
+  => vision.OpenCameraAction(*channels)
+    """open camera action => ack""";
+  => vision.CloseCameraAction()
+    """close camera action => ack""";
 }
 
 vision.VisionRetrieveFrameAction vision_retrieve_frame_action = 10 {
