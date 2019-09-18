@@ -336,43 +336,54 @@ vision.VisionCameraAction vision_camera_action = 29 {
   """Opens or closes the camera. When the camera is open,
 frames will be read at the camera's speed and captured at the caller's speed.
 Similar to a subscription, the camera must be closed as many times as it was opened.
-It will remain open until it is closed the appropriate number of times.
-
-The channels specified define what analysis is performed on each frame that is captured.
-Re-opening the camera with new channel definitions will overwrite the old ones,
-except if no channels are specified. In that case the previous configuration is preserved.
-When closing, channels are ignored and should remain empty.
-"""
+It will remain open until it is closed the appropriate number of times."""
 
   bool open = 1;
-  repeated Channel channels = 2;
 
-  => vision.OpenCameraAction(*channels)
+  => vision.OpenCameraAction()
     """open camera action => ack""";
   => vision.CloseCameraAction()
     """close camera action => ack""";
 }
 
+vision.VisionChannelMessage vision_channel_message = 30 {
+  """Creates, reads, updates or deletes channels. Using an existing key when creating,
+or using a nonexistent key unless creating a channel, will result in the command to fail.
+On a failure, no change will have been processed.
+When reading or deleting a channel, only the key is used and specifying the channel details
+is not necessary.
+
+Not specifying any keys in a channel request will list all existing channels."""
+
+  ChannelOperation op = 1;
+  repeated Channel channels = 2;
+
+  => vision.CreateChannelAction(channels)
+    """create channel action => ack""";
+  => vision.UpdateChannelAction(channels)
+    """update channel action => ack""";
+  => vision.DeleteChannelAction(keys)
+    """delete channel action => ack""";
+  => vision.ChannelRequest(keys)
+    """channel request => channel reply""";
+  <= vision.ChannelReply(channels)
+    """channel reply""";
+}
+
 vision.VisionCaptureFrameAction vision_capture_frame_action = 10 {
   """Decodes and retrieved the latest grabbed frame.
 While frames arrive regularly, they are only retrieved on demand with this command.
-It is assumed that a captured frame will be used,
-and thus all channel processing is done at this time.
-This action is therefore a relatively expensive operation."""
+Subsequent processing is done on this frame, until a newer one is captured."""
 
   => vision.CaptureFrameAction()
     """capture frame action => ack""";
 }
 
-vision.VisionFrameMessage vision_frame_message = 30 {
-  """Request or reply for the last captured frame,
-optionally with highlighting for one of the channels added in the image.
-A highlight value of -1 means no highlighting,
-a different value means the index of the channel when opening the camera.
+vision.VisionFrameMessage vision_frame_message = 31 {
+  """Request or reply for the last captured frame, as a jpg encoded image,
+optionally with highlighting for one of the channels added in the image."""
 
-The frame itself is a jpg encoded image."""
-
-  int32 highlight = 1;
+  string highlight = 1;
   bytes frame = 2;
 
   => vision.FrameRequest(highlight)
