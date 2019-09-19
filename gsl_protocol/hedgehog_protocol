@@ -391,3 +391,15 @@ optionally with highlighting for one of the channels added in the image."""
   <= vision.FrameReply(highlight, frame)
     """frame reply""";
 }
+
+vision.VisionFeatureMessage vision_feature_message = 11 {
+  """Request or reply for the last captured frame's features corresponding to one channel.."""
+
+  string channel = 1;
+  nested Feature feature = 2;
+
+  => vision.FeatureRequest(channel)
+    """feature request => feature reply""";
+  <= vision.FeatureReply(channel, feature)
+    """feature reply""";
+}
